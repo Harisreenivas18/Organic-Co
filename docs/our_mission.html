@@ -1,0 +1,380 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sustainability - Organic Co</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+    </style>
+<script src="/config.js"></script>
+</head>
+
+<body class="bg-gray-50 flex flex-col min-h-screen">
+
+<!-- HEADER -->
+<header class="bg-white shadow-sm sticky top-0 z-50">
+
+    <nav class="container mx-auto px-4 py-4 flex justify-between items-center">
+
+        <!-- LOGO -->
+        <a href="/" class="text-3xl font-bold text-green-600">
+            Organic Co
+        </a>
+
+        <!-- NAVIGATION -->
+        <div class="hidden md:flex items-center space-x-6">
+
+            <a href="/" class="text-gray-600 hover:text-green-600">
+                Home
+            </a>
+
+            <a href="/shop.html" class="text-gray-600 hover:text-green-600">
+                Shop
+            </a>
+
+            <a href="/our_mission.html" class="text-green-600 font-bold">
+                Sustainability
+            </a>
+
+        </div>
+
+        <!-- AUTH -->
+        <div class="flex items-center space-x-4" id="auth-links">
+            Loading...
+        </div>
+
+    </nav>
+
+</header>
+
+<!-- MAIN -->
+<main class="flex-grow">
+
+    <!-- HERO -->
+    <section class="relative h-96 bg-gray-800">
+
+        <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=1600&auto=format&fit=crop"
+             alt="Green nature"
+             class="w-full h-full object-cover opacity-60">
+
+        <div class="absolute inset-0 flex items-center justify-center">
+
+            <div class="text-center p-4">
+
+                <h1 class="text-5xl md:text-6xl font-bold text-white shadow-lg">
+                    Sustainable Living
+                </h1>
+
+                <p class="text-xl text-green-100 mt-4 max-w-2xl mx-auto">
+                    Helping people choose eco-friendly products for a cleaner and healthier future.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- VALUES -->
+    <section class="py-20 bg-white">
+
+        <div class="container mx-auto px-4">
+
+            <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">
+                Why Choose Organic Co
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
+
+                <!-- VALUE 1 -->
+                <div>
+
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         width="48"
+                         height="48"
+                         viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2"
+                         stroke-linecap="round"
+                         stroke-linejoin="round"
+                         class="mx-auto text-green-500 mb-4">
+
+                        <path d="M12 2a10 10 0 1 0 10 10A10.011 10.011 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8.009 8.009 0 0 1-8 8z"></path>
+                        <path d="M8 12a4 4 0 1 0 8 0 4 4 0 0 0-8 0z"></path>
+
+                    </svg>
+
+                    <h3 class="text-2xl font-semibold mb-3">
+                        Eco Responsibility
+                    </h3>
+
+                    <p class="text-gray-600">
+                        We carefully select reusable and eco-friendly products
+                        that help reduce environmental impact and plastic waste.
+                    </p>
+
+                </div>
+
+                <!-- VALUE 2 -->
+                <div>
+
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         width="48"
+                         height="48"
+                         viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2"
+                         stroke-linecap="round"
+                         stroke-linejoin="round"
+                         class="mx-auto text-green-500 mb-4">
+
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+
+                    </svg>
+
+                    <h3 class="text-2xl font-semibold mb-3">
+                        Quality & Trust
+                    </h3>
+
+                    <p class="text-gray-600">
+                        Organic Co provides sustainable products with transparency,
+                        durability, and long-term usability.
+                    </p>
+
+                </div>
+
+                <!-- VALUE 3 -->
+                <div>
+
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         width="48"
+                         height="48"
+                         viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2"
+                         stroke-linecap="round"
+                         stroke-linejoin="round"
+                         class="mx-auto text-green-500 mb-4">
+
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+
+                    </svg>
+
+                    <h3 class="text-2xl font-semibold mb-3">
+                        Green Community
+                    </h3>
+
+                    <p class="text-gray-600">
+                        Organic Co encourages responsible shopping and promotes
+                        eco-conscious lifestyles for a better tomorrow.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ECO TIP -->
+    <section class="py-20 bg-gray-50">
+
+        <div class="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-lg border border-green-200"
+             style="background-color: #f0fdf4;">
+
+            <h2 class="text-3xl font-bold text-center text-green-800">
+                Sustainability Tips
+            </h2>
+
+            <button id="get-tip-btn"
+                    class="mt-6 w-full max-w-sm mx-auto flex items-center justify-center gap-2 bg-green-500 text-white text-lg font-semibold px-6 py-3 rounded-full shadow-md hover:bg-green-600 transition-colors">
+
+                🌿 Get Green Tips
+
+            </button>
+
+            <div class="mt-6 p-6 bg-white border-2 border-dashed border-green-200 rounded-lg min-h-[100px] flex items-center justify-center">
+
+                <p id="tip-text"
+                   class="text-lg text-gray-700 text-center">
+
+                    Click the button above to get a random eco-friendly tip!
+
+                </p>
+
+            </div>
+
+            <p class="text-center text-green-700 mt-6 font-medium">
+
+                Choose reusable products and reduce plastic waste every day.
+
+            </p>
+
+        </div>
+
+    </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="bg-gray-900 text-gray-300 py-12 mt-auto">
+
+    <div class="container mx-auto px-4 text-center">
+
+        <h2 class="text-3xl font-bold text-green-500 mb-4">
+            Organic Co
+        </h2>
+
+        <p class="text-gray-400 max-w-2xl mx-auto">
+            Organic Co supports sustainable living by providing eco-friendly,
+            reusable, and environmentally responsible products.
+        </p>
+
+        <div class="border-t border-gray-700 mt-8 pt-6">
+
+            <p>
+                © 2026 Organic Co. Supporting Sustainable & Eco-Friendly Living.
+            </p>
+
+        </div>
+
+    </div>
+
+</footer>
+
+<!-- SCRIPT -->
+<script>
+
+    const token = localStorage.getItem('ecoSproutToken');
+
+    const authLinks = document.getElementById('auth-links');
+
+    function parseJwt(token) {
+
+        try {
+
+            return JSON.parse(atob(token.split('.')[1]));
+
+        } catch (e) {
+
+            return null;
+        }
+    }
+
+    let userRoles = [];
+
+    if (token) {
+
+        const tokenData = parseJwt(token);
+
+        if (tokenData && tokenData.roles) {
+
+            userRoles = tokenData.roles.split(',');
+        }
+    }
+
+    const isAdmin = userRoles.includes('ROLE_ADMIN');
+
+    if (token) {
+
+        let adminLink = isAdmin
+            ? '<a href="/admin.html" class="text-sm font-medium text-red-600 hover:text-red-700">Admin</a>'
+            : '';
+
+        authLinks.innerHTML = `
+            ${adminLink}
+
+            <a href="/order_history.html"
+               class="text-sm font-medium text-gray-600 hover:text-green-600">
+               My Orders
+            </a>
+
+            <a href="/wishlist.html"
+               class="text-gray-600 hover:text-green-600">
+               ♡
+            </a>
+
+            <a href="/cart.html"
+               class="text-gray-600 hover:text-green-600">
+               🛒
+            </a>
+
+            <a href="/profile.html"
+               class="text-gray-600 hover:text-green-600">
+               👤
+            </a>
+        `;
+
+    } else {
+
+        authLinks.innerHTML = `
+            <a href="/login.html"
+               class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700">
+
+               Login
+
+            </a>
+        `;
+    }
+
+    // ECO TIPS
+
+    const getTipBtn = document.getElementById('get-tip-btn');
+
+    const tipTextEl = document.getElementById('tip-text');
+
+    async function fetchRandomTip() {
+
+        tipTextEl.textContent = 'Finding a useful eco tip...';
+
+        getTipBtn.disabled = true;
+
+        try {
+
+            const response = await fetch(API_BASE + '/api/tips/random');
+
+            if (!response.ok) {
+
+                throw new Error('Could not fetch a tip.');
+            }
+
+            const ecoTip = await response.json();
+
+            tipTextEl.textContent = ecoTip.tip;
+
+        } catch (error) {
+
+            tipTextEl.textContent =
+                'Oops! Something went wrong. Please try again!';
+
+        } finally {
+
+            getTipBtn.disabled = false;
+        }
+    }
+
+    getTipBtn.addEventListener('click', fetchRandomTip);
+
+</script>
+
+</body>
+</html>

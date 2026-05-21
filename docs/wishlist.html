@@ -1,0 +1,275 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Wishlist - EcoSprout</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+<script src="/config.js"></script>
+</head>
+<!-- UPDATED BODY to fix footer issue -->
+<body class="bg-gray-50 flex flex-col min-h-screen">
+
+<!-- Header (UPDATED) -->
+<header class="bg-white shadow-sm sticky top-0 z-50">
+    <nav class="container mx-auto px-4 py-4 flex justify-between items-center">
+        <!-- Logo -->
+        <a href="/" class="text-3xl font-bold text-green-600">
+            EcoSprout
+        </a>
+        <!-- Main Navigation -->
+        <div class="hidden md:flex items-center space-x-6">
+            <a href="/" class="text-gray-600 hover:text-green-600">Home</a>
+            <a href="/shop.html" class="text-gray-600 hover:text-green-600">Shop</a>
+            <a href="/our_mission.html" class="text-gray-600 hover:text-green-600">Our Mission</a>
+        </div>
+        <!-- Auth/Cart Links (Will be populated by JS) -->
+        <div class="flex items-center space-x-4" id="auth-links">
+            Loading...
+        </div>
+    </nav>
+</header>
+
+<!-- UPDATED MAIN to fix footer issue -->
+<main class="container mx-auto px-4 py-12 flex-grow">
+    <h1 class="text-3xl font-bold mb-8">My Wishlist</h1>
+
+    <!-- Global Message Bar -->
+    <div id="message-bar" class="hidden px-4 py-3 rounded-lg relative mb-6" role="alert">
+        <span class="block sm:inline" id="message-text"></span>
+    </div>
+
+    <!-- Product Grid -->
+    <div id="product-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <!-- Loading message -->
+        <div id="loading-message" class="text-center col-span-4 text-gray-500 py-10">
+            Loading your wishlist...
+        </div>
+        <!-- Wishlist items will be injected here -->
+    </div>
+</main>
+
+<!-- UPDATED FOOTER to fix footer issue -->
+<footer class="bg-gray-800 text-gray-300 py-12 mt-auto">
+    <div class="container mx-auto px-4 text-center">
+        <p>&copy; 2025 EcoSprout. All rights reserved.</p>
+    </div>
+</footer>
+
+
+<script>
+    // --- JWT & Auth Management ---
+    const token = localStorage.getItem('ecoSproutToken');
+    const authLinks = document.getElementById('auth-links');
+
+    function parseJwt(token) {
+        try { return JSON.parse(atob(token.split('.')[1])); } catch (e) { return null; }
+    }
+    let userRoles = [];
+    if (token) {
+        const tokenData = parseJwt(token);
+        if (tokenData && tokenData.roles) {
+            userRoles = tokenData.roles.split(',');
+        }
+    }
+    const isAdmin = userRoles.includes('ROLE_ADMIN');
+
+    if (token) {
+        let adminLink = isAdmin ? '<a href="/admin.html" class="text-sm font-medium text-red-600 hover:text-red-700">Admin</a>' : '';
+        authLinks.innerHTML = `
+                ${adminLink}
+                <a href="/order_history.html" class="text-sm font-medium text-gray-600 hover:text-green-600">My Orders</a>
+                <!-- Wishlist Icon -->
+                <a href="/wishlist.html" class="text-green-600 font-bold"> <!-- Active -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+                </a>
+                <a href="/cart.html" class="text-gray-600 hover:text-green-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                </a>
+                <a href="/profile.html" class="text-gray-600 hover:text-green-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                </a>
+            `;
+    } else {
+        window.location.href = '/login.html?redirect=wishlist';
+    }
+
+    function logout() {
+        localStorage.removeItem('ecoSproutToken');
+        window.location.href = '/';
+    }
+    // --- End Auth ---
+
+    // --- Message Bar ---
+    const messageBar = document.getElementById('message-bar');
+    const messageText = document.getElementById('message-text');
+
+    function showMessage(message, isError = false) {
+        messageText.textContent = message;
+        if (isError) {
+            messageBar.className = "bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg relative mb-6";
+        } else {
+            messageBar.className = "bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg relative mb-6";
+        }
+        messageBar.classList.remove('hidden');
+        setTimeout(() => {
+            messageBar.classList.add('hidden');
+        }, 3000);
+    }
+
+    // --- Wishlist Logic ---
+    const productList = document.getElementById('product-list');
+    const loadingMessage = document.getElementById('loading-message');
+
+    function createProductCard(product) {
+        const categoryName = product.categories.length > 0 ? product.categories[0].name : 'General';
+        const imageUrl = product.imageUrl ? API_BASE + product.imageUrl : 'https://placehold.co/600x600/e2e8f0/94a3b8?text=EcoSprout';
+
+        let buttonHtml = '';
+        if (product.stockQuantity > 0) {
+            buttonHtml = `<button onclick="addToCart(${product.id})" class="bg-green-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-green-700">
+                                Add to Cart
+                              </button>`;
+        } else {
+            buttonHtml = `<button class="bg-gray-400 text-white px-4 py-2 rounded-md text-sm font-medium cursor-not-allowed" disabled>
+                                Out of Stock
+                              </button>`;
+        }
+
+        return `
+                <div class="border rounded-lg shadow-sm overflow-hidden flex flex-col" id="product-card-${product.id}">
+                    <a href="/product.html?id=${product.id}" class="block bg-gray-100 h-64 group relative">
+                        <img src="${imageUrl}" alt="${product.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                             onerror="this.src='https://placehold.co/600x600/e2e8f0/94a3b8?text=Image+Not+Found'">
+
+                        <!-- Wishlist Heart Icon (Always filled on this page) -->
+                        <button onclick="toggleWishlist(${product.id}, event)" class="absolute top-3 right-3 p-2 bg-white/70 rounded-full text-red-500 hover:bg-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+                        </button>
+                    </a>
+                    <div class="p-4 flex-grow">
+                        <span class="text-xs text-gray-500 uppercase">${categoryName}</span>
+                        <a href="/product.html?id=${product.id}" class="block">
+                            <h3 class="text-lg font-semibold mt-1 hover:text-green-600">${product.name}</h3>
+                        </a>
+                    </div>
+                    <div class="p-4 border-t flex justify-between items-center">
+                        <span class="text-xl font-bold text-green-600">₹${product.price.toFixed(2)}</span>
+                        ${buttonHtml}
+                    </div>
+                </div>
+            `;
+    }
+
+    // --- Show "Empty" Message ---
+    function showEmptyWishlistMessage() {
+        loadingMessage.style.display = 'none'; // Hide loading
+        productList.innerHTML = ''; // Clear any remaining items
+        productList.innerHTML = `
+                <div class="text-center col-span-4 text-gray-600 py-10 bg-white rounded-lg shadow-sm">
+                    <h2 class="text-2xl font-semibold">Your wishlist is empty.</h2>
+                    <a href="/shop.html" class="mt-6 inline-block bg-green-600 text-white text-lg font-medium px-8 py-3 rounded-md shadow-lg hover:bg-green-700">
+                        Browse Products
+                    </a>
+                </div>
+            `;
+    }
+
+    // --- Fetch Wishlist Products ---
+    async function fetchWishlist() {
+        if (!token) return;
+
+        try {
+            const response = await fetch(API_BASE + '/api/wishlist', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (response.status === 401) logout();
+            if (!response.ok) throw new Error('Failed to fetch wishlist');
+
+            const products = await response.json();
+
+            if (products.length > 0) {
+                loadingMessage.style.display = 'none';
+                productList.innerHTML = '';
+                products.forEach(product => {
+                    productList.innerHTML += createProductCard(product);
+                });
+            } else {
+                showEmptyWishlistMessage();
+            }
+        } catch (error) {
+            console.error('Fetch wishlist error:', error);
+            loadingMessage.innerHTML = `<div class="text-center w-full text-red-500">Error loading wishlist: ${error.message}</div>`;
+        }
+    }
+
+    // --- Toggle Wishlist (Remove) ---
+    async function toggleWishlist(productId, event) {
+        event.preventDefault(); // Stop click from going to product page
+        event.stopPropagation();
+        if (!token) {
+            window.location.href = '/login.html';
+            return;
+        }
+
+        // On this page, clicking always means "remove"
+        if (!confirm("Are you sure you want to remove this from your wishlist?")) {
+            return;
+        }
+
+        try {
+            const response = await fetch(API_BASE + '/api/wishlist/toggle', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                body: JSON.stringify({ productId: productId })
+            });
+
+            if (response.ok) {
+                showMessage('Item removed from wishlist.', false);
+                // Remove the card from the UI
+                document.getElementById(`product-card-${productId}`).remove();
+
+                // --- THIS IS THE FIX ---
+                // Check if the product list is now empty
+                if (productList.children.length === 0) {
+                    showEmptyWishlistMessage();
+                }
+                // --- END FIX ---
+
+            } else {
+                throw new Error('Failed to update wishlist');
+            }
+        } catch (error) {
+            console.error('Toggle wishlist error:', error);
+            showMessage(error.message, true);
+        }
+    }
+
+    // --- Add to Cart (from Wishlist) ---
+    async function addToCart(productId) {
+        const payload = { productId: productId, quantity: 1 };
+        try {
+            const response = await fetch(API_BASE + '/api/cart/add', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                body: JSON.stringify(payload)
+            });
+            if (response.ok) {
+                showMessage('Success! Product added to cart.', false);
+            } else {
+                const errorData = await response.json();
+                showMessage(errorData.message || 'Error adding to cart', true);
+            }
+        } catch (error) {
+            showMessage('An error occurred. Please try again.', true);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', fetchWishlist);
+</script>
+</body>
+</html>

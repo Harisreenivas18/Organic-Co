@@ -1,0 +1,197 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order History - EcoSprout</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+<script src="/config.js"></script>
+</head>
+<body class="bg-gray-50 flex flex-col min-h-screen">
+
+<!-- Header (UPDATED) -->
+<header class="bg-white shadow-sm">
+    <nav class="container mx-auto px-4 py-4 flex justify-between items-center">
+        <!-- Logo -->
+        <a href="/" class="text-3xl font-bold text-green-600">
+            EcoSprout
+        </a>
+        <!-- Main Navigation -->
+        <div class="hidden md:flex items-center space-x-6">
+            <a href="/" class="text-gray-600 hover:text-green-600">Home</a>
+            <a href="/shop.html" class="text-gray-600 hover:text-green-600">Shop</a>
+            <a href="/our_mission.html" class="text-gray-600 hover:text-green-600">Our Mission</a>
+        </div>
+        <!-- Auth/Cart Links -->
+        <div class="flex items-center space-x-4" id="auth-links">
+            <!-- JS will populate this -->
+        </div>
+    </nav>
+</header>
+
+<!-- Order History Content -->
+<main class="container mx-auto px-4 py-12 flex-grow">
+    <h1 class="text-3xl font-bold mb-8">My Order History</h1>
+
+    <div id="orders-container" class="space-y-6">
+        <!-- Loading message -->
+        <div id="loading-message" class="text-center text-gray-500 py-10">
+            Loading your orders...
+        </div>
+        <!-- Order history will be injected here -->
+    </div>
+</main>
+
+<!-- Footer -->
+<footer class="bg-gray-800 text-gray-300 py-12 mt-auto">
+    <div class="container mx-auto px-4 text-center">
+        <p>&copy; 2025 EcoSprout. All rights reserved.</p>
+    </div>
+</footer>
+
+<!-- JavaScript (UPDATED) -->
+<script>
+    // --- JWT & Auth Management (UPDATED) ---
+    const token = localStorage.getItem('ecoSproutToken');
+    const authLinks = document.getElementById('auth-links');
+
+    function parseJwt(token) {
+        try { return JSON.parse(atob(token.split('.')[1])); } catch (e) { return null; }
+    }
+    let userRoles = [];
+    if (token) {
+        const tokenData = parseJwt(token);
+        if (tokenData && tokenData.roles) {
+            userRoles = tokenData.roles.split(',');
+        }
+    }
+    const isAdmin = userRoles.includes('ROLE_ADMIN');
+
+    // --- NEW HEADER ---
+    if (token) {
+        let adminLink = isAdmin ? '<a href="/admin.html" class="text-sm font-medium text-red-600 hover:text-red-700">Admin</a>' : '';
+        authLinks.innerHTML = `
+                ${adminLink}
+                <a href="/order_history.html" class="text-green-600 font-bold">My Orders</a> <!-- Active -->
+                <a href="/wishlist.html" class="text-gray-600 hover:text-green-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+                </a>
+                <a href="/cart.html" class="text-gray-600 hover:text-green-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                </a>
+                <a href="/profile.html" class="text-gray-600 hover:text-green-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                </a>
+            `;
+    } else {
+        window.location.href = '/login.html?redirect=order_history';
+    }
+    // --- END HEADER ---
+
+    function logout() {
+        localStorage.removeItem('ecoSproutToken');
+        window.location.href = '/';
+    }
+
+    const ordersContainer = document.getElementById('orders-container');
+    const loadingMessage = document.getElementById('loading-message');
+
+    function renderOrders(orders) {
+        if (!orders || orders.length === 0) {
+            loadingMessage.innerHTML = `
+                    <div class="text-center text-gray-600 py-10 bg-white rounded-lg shadow-sm">
+                        <h2 class="text-xl font-medium">You have no past orders.</h2>
+                        <p class="mt-2">Go shop our collection to place your first order!</p>
+                        <a href="/shop.html" class="mt-4 inline-block bg-green-600 text-white text-sm font-medium px-4 py-2 rounded-md hover:bg-green-700">Shop</a>
+                    </div>
+                `;
+            return;
+        }
+
+        loadingMessage.innerHTML = '';
+
+        orders.forEach(order => {
+            const orderDate = new Date(order.orderDate).toLocaleDateString('en-US', {
+                year: 'numeric', month: 'long', day: 'numeric'
+            });
+
+            const itemsHtml = order.orderItems.map(item => `
+                    <div class="flex items-center space-x-4">
+                        <div class="w-16 h-16 bg-gray-100 rounded-md overflow-hidden">
+                            <img src="${item.product.imageUrl || 'https://placehold.co/100x100/e2e8f0/94a3b8?text=Eco'}" alt="${item.product.name}" class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <p class="font-semibold">${item.product.name}</p>
+                            <p class="text-sm text-gray-500">Qty: ${item.quantity}</p>
+                        </div>
+                        <div class="ml-auto text-right">
+                            <p class="font-semibold">₹${(item.unitPrice * item.quantity).toFixed(2)}</p>
+                            <p class="text-sm text-gray-500">(₹${item.unitPrice.toFixed(2)} each)</p>
+                        </div>
+                    </div>
+                `).join('');
+
+            const orderCard = `
+                    <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                        <div class="bg-gray-100 px-6 py-4 border-b flex flex-wrap justify-between items-center">
+                            <div>
+                                <p class="text-sm text-gray-600">Order Placed</p>
+                                <p class="font-medium">${orderDate}</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-600">Total</p>
+                                <p class="font-medium">₹${order.totalAmount.toFixed(2)}</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-600">Order ID</p>
+                                <p class="font-medium">#${order.id}</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-600">Status</p>
+                                <span class="px-3 py-1 text-sm font-medium rounded-full bg-blue-100 text-blue-800">${order.status}</span>
+                            </div>
+                        </div>
+                        <div class="p-6 space-y-4">
+                            ${itemsHtml}
+                        </div>
+                    </div>
+                `;
+            ordersContainer.innerHTML += orderCard;
+        });
+    }
+
+    async function fetchOrderHistory() {
+        if (!token) return;
+
+        try {
+            const response = await fetch(API_BASE + '/api/orders', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (response.ok) {
+                const orders = await response.json();
+                renderOrders(orders);
+            } else if (response.status === 401 || response.status === 403) {
+                alert('Your session has expired. Please log in again.');
+                logout();
+            } else {
+                throw new Error(`Server responded with status: ${response.status}`);
+            }
+
+        } catch (error) {
+            console.error('Failed to fetch order history:', error);
+            loadingMessage.innerHTML = `<div class="text-center w-full text-red-500">Error loading orders: ${error.message}</div>`;
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', fetchOrderHistory);
+</script>
+</body>
+</html>

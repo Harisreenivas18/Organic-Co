@@ -1,0 +1,102 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - EcoSprout</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+<script src="/config.js"></script>
+</head>
+<body class="bg-gray-50 flex items-center justify-center min-h-screen">
+
+<div class="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
+    <div class="text-center">
+        <a href="/" class="text-3xl font-bold text-green-600">EcoSprout</a>
+        <h2 class="mt-2 text-2xl font-semibold text-gray-900">Sign in to your account</h2>
+        <p class="mt-1 text-sm text-gray-600">
+            Or <a href="/register.html" class="font-medium text-green-600 hover:text-green-500">create a new account</a>
+        </p>
+    </div>
+
+    <!-- Login Form -->
+    <form id="loginForm" class="space-y-4">
+        <div>
+            <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+            <input id="username" name="username" type="text" required
+                   class="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500">
+        </div>
+
+        <div>
+            <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+            <input id="password" name="password" type="password" autocomplete="current-password" required
+                   class="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500">
+        </div>
+
+        <div>
+            <button type="submit"
+                    class="w-full px-4 py-2 text-sm font-medium text-white bg-green-600 border border-transparent rounded-md shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                Sign In
+            </button>
+        </div>
+    </form>
+
+    <!-- Message area for success or error -->
+    <div id="message" class="text-sm text-center"></div>
+</div>
+
+<script>
+    document.getElementById('loginForm').addEventListener('submit', async function(event) {
+        event.preventDefault(); // Stop the form from submitting normally
+
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        const messageEl = document.getElementById('message');
+
+        const loginRequest = {
+            username: username,
+            password: password
+        };
+
+        try {
+            const response = await fetch(API_BASE + '/api/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(loginRequest)
+            });
+
+            if (response.ok) { // Status 200-299
+                const data = await response.json();
+
+                // --- SUCCESS ---
+                // Save the token to Local Storage
+                localStorage.setItem('ecoSproutToken', data.token);
+
+                messageEl.textContent = 'Login successful! Redirecting...';
+                messageEl.className = 'text-green-600';
+
+                // Redirect to homepage after a short delay
+                setTimeout(() => {
+                    window.location.href = '/'; // Use relative URL
+                }, 1000);
+
+            } else {
+                // Show error message from the backend
+                const errorBody = await response.text();
+                messageEl.textContent = errorBody;
+                messageEl.className = 'text-red-600';
+            }
+        } catch (error) {
+            console.error('Login error:', error);
+            messageEl.textContent = 'An error occurred during login. Please try again.';
+            messageEl.className = 'text-red-600';
+        }
+    });
+</script>
+</body>
+</html>
