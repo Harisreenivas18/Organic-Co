@@ -183,7 +183,7 @@
         if (!token) return;
 
         try {
-            const response = await fetch('http://localhost:8081/api/wishlist', {
+            const response = await fetch('/api/wishlist', {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             if (response.status === 401) logout();
@@ -252,7 +252,7 @@
     async function addToCart(productId) {
         const payload = { productId: productId, quantity: 1 };
         try {
-            const response = await fetch('http://localhost:8081/api/cart/add', {
+            const response = await fetch('/api/cart/add', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                 body: JSON.stringify(payload)

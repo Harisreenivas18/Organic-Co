@@ -196,7 +196,7 @@
         if (!token) return;
 
         try {
-            const response = await fetch('http://localhost:8081/api/cart', {
+            const response = await fetch('/api/cart', {
                 method: 'GET',
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -281,7 +281,7 @@
         };
 
         try {
-            const response = await fetch('http://localhost:8081/api/cart/checkout', {
+            const response = await fetch('/api/cart/checkout', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                 body: JSON.stringify(shippingDetails)

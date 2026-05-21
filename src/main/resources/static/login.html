@@ -61,7 +61,7 @@
         };
 
         try {
-            const response = await fetch('http://localhost:8081/api/auth/login', {
+            const response = await fetch('/api/auth/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -81,7 +81,7 @@
 
                 // Redirect to homepage after a short delay
                 setTimeout(() => {
-                    window.location.href = 'http://localhost:8081/'; // Use absolute URL
+                    window.location.href = '/'; // Use relative URL
                 }, 1000);
 
             } else {

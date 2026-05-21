@@ -246,7 +246,7 @@
     async function fetchWishlistIds() {
         if (!token) return;
         try {
-            const response = await fetch('http://localhost:8081/api/wishlist/ids', {
+            const response = await fetch('/api/wishlist/ids', {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             if (response.ok) {
@@ -263,8 +263,8 @@
             await fetchWishlistIds();
 
             const [productResponse, categoryResponse] = await Promise.all([
-                fetch('http://localhost:8081/api/products'),
-                fetch('http://localhost:8081/api/categories')
+                fetch('/api/products'),
+                fetch('/api/categories')
             ]);
 
             if (!productResponse.ok) throw new Error('Failed to fetch products');
@@ -313,7 +313,7 @@
         const payload = { productId: productId, quantity: 1 };
 
         try {
-            const response = await fetch('http://localhost:8081/api/cart/add', {
+            const response = await fetch('/api/cart/add', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -387,7 +387,7 @@
     productList.innerHTML = '<div class="text-center col-span-4 text-gray-500">Searching...</div>';
 
     try {
-        const response = await fetch(`http://localhost:8081/api/products?keyword=${encodeURIComponent(keyword)}`);
+        const response = await fetch(`/api/products?keyword=${encodeURIComponent(keyword)}`);
         if (!response.ok) throw new Error('Search failed');
 
         const products = await response.json();
