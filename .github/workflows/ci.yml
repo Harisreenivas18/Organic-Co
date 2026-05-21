@@ -7,7 +7,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     services:
@@ -42,3 +42,11 @@ jobs:
         SPRING_DATASOURCE_USERNAME: postgres
         SPRING_DATASOURCE_PASSWORD: hari@123
       run: mvn -B clean package
+
+    # Trigger Render deployment via Deploy Hook URL
+    # Add RENDER_DEPLOY_HOOK_URL as a GitHub Secret
+    - name: Trigger Render Deployment
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      run: |
+        curl -s "${{ secrets.RENDER_DEPLOY_HOOK_URL }}" > /dev/null
+        echo "Render deployment triggered."
