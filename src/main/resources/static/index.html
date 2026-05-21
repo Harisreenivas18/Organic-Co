@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Organic Co - Sustainable & Eco-Friendly Products</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .heart-btn.wishlisted {
+            color: #EF4444;
+            fill: #EF4444;
+        }
+
+    </style>
+
+</head>
+
+<body class="bg-white text-gray-800">
+
+<!-- HEADER -->
+<header class="shadow-sm sticky top-0 bg-white z-50">
+
+    <nav class="container mx-auto px-4 py-4 flex justify-between items-center">
+
+        <!-- LOGO -->
+        <a href="/" class="text-3xl font-bold text-green-600">
+            Organic Co
+        </a>
+
+        <!-- NAVIGATION -->
+        <div class="hidden md:flex items-center space-x-6">
+
+            <a href="/" class="text-green-600 font-bold">
+                Home
+            </a>
+
+            <a href="/shop.html" class="text-gray-600 hover:text-green-600">
+                Shop
+            </a>
+
+            <a href="/our_mission.html" class="text-gray-600 hover:text-green-600">
+                Sustainability
+            </a>
+
+        </div>
+
+        <!-- SEARCH -->
+        <div class="hidden md:block flex-1 max-w-sm mx-4">
+
+            <div class="flex items-center">
+
+                <input type="text"
+                       id="search-input"
+                       placeholder="Search products..."
+                       class="w-full px-4 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-green-600">
+
+                <button onclick="handleSearch()"
+                        class="bg-green-600 text-white px-4 py-2 rounded-r-lg hover:bg-green-700">
+
+                    Search
+
+                </button>
+
+            </div>
+
+        </div>
+
+        <!-- AUTH -->
+        <div class="flex items-center space-x-4" id="auth-links">
+
+            <span class="text-gray-400 text-sm">
+                Loading...
+            </span>
+
+        </div>
+
+    </nav>
+
+</header>
+
+<!-- HERO -->
+<section class="bg-green-50 py-20">
+
+    <div class="container mx-auto px-4 text-center">
+
+        <h1 class="text-5xl md:text-6xl font-bold text-green-800">
+
+            Eco-Friendly Living Starts Here.
+
+        </h1>
+
+        <p class="mt-4 text-lg text-green-700 max-w-2xl mx-auto">
+
+            Explore sustainable products designed to reduce waste,
+            protect nature, and support a cleaner future.
+
+        </p>
+
+        <a href="/shop.html"
+           class="mt-8 inline-block bg-green-600 text-white text-lg font-medium px-8 py-3 rounded-md shadow-lg hover:bg-green-700">
+
+            Shop Our Collection
+
+        </a>
+
+    </div>
+
+</section>
+
+<!-- PRODUCTS -->
+<section class="py-16">
+
+    <div class="container mx-auto px-4">
+
+        <h2 id="grid-title"
+            class="text-3xl font-bold text-center mb-10">
+
+            Trending Products
+
+        </h2>
+
+        <div id="message-bar"
+             class="hidden px-4 py-3 rounded-lg relative mb-6">
+
+            <span id="message-text"></span>
+
+        </div>
+
+        <div id="product-list"
+             class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+
+            <div class="text-center col-span-4 text-gray-500 py-10">
+
+                Loading products...
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- FOOTER -->
+<footer class="bg-gray-900 text-gray-300 mt-20">
+
+    <div class="container mx-auto px-6 py-14">
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+
+            <!-- BRAND -->
+            <div>
+
+                <h2 class="text-3xl font-bold text-green-500">
+                    Organic Co
+                </h2>
+
+                <p class="mt-4 text-gray-400 leading-relaxed">
+
+                    Organic Co provides eco-friendly, reusable and
+                    sustainable lifestyle products that help create
+                    a greener future.
+
+                </p>
+
+            </div>
+
+            <!-- LINKS -->
+            <div>
+
+                <h3 class="text-xl font-semibold text-white mb-4">
+                    Quick Links
+                </h3>
+
+                <ul class="space-y-3">
+
+                    <li>
+                        <a href="/" class="hover:text-green-400">
+                            Home
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="/shop.html" class="hover:text-green-400">
+                            Shop
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="/our_mission.html" class="hover:text-green-400">
+                            Sustainability
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="/cart.html" class="hover:text-green-400">
+                            Cart
+                        </a>
+                    </li>
+
+                </ul>
+
+            </div>
+
+            <!-- CATEGORY -->
+            <div>
+
+                <h3 class="text-xl font-semibold text-white mb-4">
+                    Categories
+                </h3>
+
+                <ul class="space-y-3">
+
+                    <li>Reusable Products</li>
+                    <li>Organic Essentials</li>
+                    <li>Solar Gadgets</li>
+                    <li>Eco Lifestyle</li>
+
+                </ul>
+
+            </div>
+
+            <!-- CONTACT -->
+            <div>
+
+                <h3 class="text-xl font-semibold text-white mb-4">
+                    Contact Us
+                </h3>
+
+                <p class="mb-3">📍 Kerala, India</p>
+
+                <p class="mb-3">📧 organicco@gmail.com</p>
+
+                <p>📞 +91 9876543210</p>
+
+            </div>
+
+        </div>
+
+        <div class="border-t border-gray-700 mt-10 pt-6 text-center text-gray-500">
+
+            <p>
+                © 2026 Organic Co. Supporting Sustainable &
+                Eco-Friendly Living.
+            </p>
+
+        </div>
+
+    </div>
+
+</footer>
+
+<!-- SCRIPT -->
+<script>
+
+    const token = localStorage.getItem('ecoSproutToken');
+
+    const authLinks = document.getElementById('auth-links');
+
+    const productList = document.getElementById('product-list');
+
+    const gridTitle = document.getElementById('grid-title');
+
+    let wishlistedProductIds = new Set();
+
+    // JWT PARSER
+
+    function parseJwt(token) {
+
+        try {
+
+            return JSON.parse(atob(token.split('.')[1]));
+
+        } catch (e) {
+
+            return null;
+        }
+    }
+
+    // HEADER
+
+    function updateHeader() {
+
+        let userRoles = [];
+
+        if (token) {
+
+            const tokenData = parseJwt(token);
+
+            if (tokenData && tokenData.roles) {
+
+                userRoles = tokenData.roles.split(',');
+            }
+        }
+
+        const isAdmin = userRoles.includes('ROLE_ADMIN');
+
+        if (token) {
+
+            let adminLink = isAdmin
+                ? '<a href="/admin.html" class="text-sm font-medium text-red-600">Admin</a>'
+                : '';
+
+            authLinks.innerHTML = `
+
+                ${adminLink}
+
+                <a href="/order_history.html"
+                   class="text-gray-600 hover:text-green-600">
+
+                   My Orders
+
+                </a>
+
+                <a href="/wishlist.html"
+                   class="text-gray-600 hover:text-green-600 text-2xl">
+
+                   ♡
+
+                </a>
+
+                <a href="/cart.html"
+                   class="text-gray-600 hover:text-green-600 text-2xl">
+
+                   🛒
+
+                </a>
+
+                <a href="/profile.html"
+                   class="text-gray-600 hover:text-green-600 text-2xl">
+
+                   👤
+
+                </a>
+
+            `;
+
+        } else {
+
+            authLinks.innerHTML = `
+
+                <a href="/login.html"
+                   class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700">
+
+                   Login
+
+                </a>
+
+            `;
+        }
+    }
+
+    // SEARCH
+
+    async function handleSearch() {
+
+        const keyword =
+            document.getElementById('search-input').value;
+
+        gridTitle.textContent = keyword
+            ? `Search results for "${keyword}"`
+            : "Trending Products";
+
+        fetchProducts(keyword);
+    }
+
+    // PRODUCT CARD
+
+    function createProductCard(product) {
+
+        const imageUrl =
+            product.imageUrl ||
+            '/images/default.png';
+
+        return `
+
+            <div class="border rounded-lg shadow-sm overflow-hidden flex flex-col bg-white">
+
+                <div class="relative h-64 bg-gray-100">
+
+                    <a href="/product.html?id=${product.id}">
+
+                        <img src="${imageUrl}"
+                             alt="${product.name}"
+                             class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
+
+                    </a>
+
+                </div>
+
+                <div class="p-4 flex-grow">
+
+                    <h3 class="font-bold text-lg mb-2">
+
+                        ${product.name}
+
+                    </h3>
+
+                    <p class="text-sm text-gray-600">
+
+                        ${product.description}
+
+                    </p>
+
+                </div>
+
+                <div class="p-4 border-t flex justify-between items-center">
+
+                    <span class="text-xl font-bold text-green-600">
+
+                        ₹${product.price.toFixed(2)}
+
+                    </span>
+
+                    <button onclick="addToCart(${product.id})"
+                            class="bg-green-600 text-white px-4 py-2 rounded text-sm hover:bg-green-700">
+
+                        Add to Cart
+
+                    </button>
+
+                </div>
+
+            </div>
+        `;
+    }
+
+    // FETCH PRODUCTS
+
+    async function fetchProducts(keyword = "") {
+
+        productList.innerHTML = `
+            <div class="text-center col-span-4 text-gray-500 py-10">
+                Loading...
+            </div>
+        `;
+
+        try {
+
+            const url = keyword
+                ? `/api/products?keyword=${encodeURIComponent(keyword)}`
+                : '/api/products';
+
+            const response = await fetch(url);
+
+            const allProducts = await response.json();
+
+            // SHOW ONLY SELECTED TRENDING PRODUCTS
+
+            const products = [
+                allProducts[0],
+                allProducts[2],
+                allProducts[4],
+                allProducts[7],
+                allProducts[10]
+            ];
+
+            productList.innerHTML = '';
+
+            if (products.length > 0) {
+
+                products.forEach(product => {
+
+                    if (product) {
+
+                        productList.innerHTML +=
+                            createProductCard(product);
+                    }
+                });
+
+            } else {
+
+                productList.innerHTML = `
+                    <div class="text-center col-span-4 py-20 text-gray-500">
+                        No products found.
+                    </div>
+                `;
+            }
+
+        } catch (error) {
+
+            productList.innerHTML = `
+                <div class="text-center col-span-4 text-red-500">
+                    Failed to load products.
+                </div>
+            `;
+        }
+    }
+
+    // CART
+
+    async function addToCart(id) {
+
+        if (!token) {
+
+            window.location.href = '/login.html';
+
+            return;
+        }
+
+        alert("Product added to cart!");
+    }
+
+    // LOAD
+
+    document.addEventListener('DOMContentLoaded', () => {
+
+        setTimeout(() => {
+
+            updateHeader();
+
+        }, 100);
+
+        fetchProducts();
+
+    });
+
+    // ENTER SEARCH
+
+    document.getElementById('search-input')
+        .addEventListener('keypress', (e) => {
+
+            if (e.key === 'Enter') {
+
+                handleSearch();
+            }
+        });
+
+</script>
+
+</body>
+</html>

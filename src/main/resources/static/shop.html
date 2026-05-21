@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop All - Organic Co</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .shop-tab-btn.active {
+            border-bottom-color: #10B981; /* green-500 */
+            color: #065F46; /* green-800 */
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+<!-- Header (UPDATED) -->
+<header class="bg-white shadow-sm">
+    <nav class="container mx-auto px-4 py-4 flex justify-between items-center">
+        <!-- Logo -->
+        <a href="/" class="text-3xl font-bold text-green-600">
+            Organic Co
+        </a>
+        <!-- Main Navigation -->
+        <div class="hidden md:flex items-center space-x-6">
+            <a href="/" class="text-gray-600 hover:text-green-600">Home</a>
+            <a href="/shop.html" class="text-green-600 font-bold">Shop</a> <!-- Active -->
+            <a href="/our_mission.html" class="text-gray-600 hover:text-green-600">Sustainability</a>
+        </div>
+        <div class="hidden md:block flex-1 max-w-sm mx-4">
+            <div class="flex items-center">
+                <input type="text"
+                       id="search-input"
+                       placeholder="Search products..."
+                       class="w-full px-4 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent">
+                <button onclick="handleSearch()"
+                        class="bg-green-600 text-white px-4 py-2 rounded-r-lg hover:bg-green-700 transition duration-300">
+                    Search
+                </button>
+            </div>
+        </div>
+        <!-- Header Icons & Auth -->
+        <div class="flex items-center space-x-4" id="auth-links">
+            <!-- JS will populate this -->
+        </div>
+    </nav>
+</header>
+
+<main>
+    <!-- Product Grid Section -->
+    <section class="py-16">
+        <div class="container mx-auto px-4">
+
+            <h1 class="text-4xl font-bold text-center mb-4">Shop Our Collection</h1>
+            <p class="text-lg text-gray-600 text-center mb-10">Browse all products or filter by your favorite category.</p>
+
+            <!-- Sub-Navigation Tabs -->
+            <div class="border-b border-gray-200 mb-10">
+                <nav class="-mb-px flex space-x-8 overflow-x-auto" aria-label="Tabs" id="category-tabs-nav">
+                    <button id="tab-all" onclick="filterProducts('all')" class="shop-tab-btn active whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                        All Products
+                    </button>
+                    <!-- Category tabs will be injected here by JS -->
+                </nav>
+            </div>
+
+            <!-- Success/Error Message Bar -->
+            <div id="message-bar" class="hidden px-4 py-3 rounded-lg relative mb-6" role="alert">
+                <span class="block sm:inline" id="message-text"></span>
+            </div>
+
+            <!-- Product Grid -->
+            <div id="product-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Products will be injected here -->
+            </div>
+
+            <div id="loading-message" class="text-center col-span-4 text-gray-500 py-10">
+                Loading products...
+            </div>
+
+        </div>
+    </section>
+</main>
+
+<!-- Footer -->
+<footer class="bg-gray-800 text-gray-300 py-12">
+    <div class="container mx-auto px-4 text-center">
+        <p>&copy; 2025 EcoSprout. All rights reserved.</p>
+        <p class="mt-2 text-sm">Live Sustainably, Shop Responsibly.</p>
+    </div>
+</footer>
+
+<!-- JavaScript (UPDATED) -->
+<script>
+    // --- JWT & Auth Management (UPDATED) ---
+    const token = localStorage.getItem('ecoSproutToken');
+    const authLinks = document.getElementById('auth-links');
+
+    function parseJwt(token) {
+        try { return JSON.parse(atob(token.split('.')[1])); } catch (e) { return null; }
+    }
+
+    let userRoles = [];
+    if (token) {
+        const tokenData = parseJwt(token);
+        if (tokenData && tokenData.roles) {
+            userRoles = tokenData.roles.split(',');
+        }
+    }
+    const isAdmin = userRoles.includes('ROLE_ADMIN');
+
+    // --- NEW HEADER ---
+    if (token) {
+        let adminLink = isAdmin ? '<a href="/admin.html" class="text-sm font-medium text-red-600 hover:text-red-700">Admin</a>' : '';
+        authLinks.innerHTML = `
+                ${adminLink}
+                <a href="/order_history.html" class="text-sm font-medium text-gray-600 hover:text-green-600">My Orders</a>
+                <a href="/wishlist.html" class="text-gray-600 hover:text-green-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+                </a>
+                <a href="/cart.html" class="text-gray-600 hover:text-green-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                </a>
+                <a href="/profile.html" class="text-gray-600 hover:text-green-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                </a>
+            `;
+    } else {
+        authLinks.innerHTML = `
+                <a href="/wishlist.html" class="text-gray-600 hover:text-green-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+                </a>
+                <a href="/cart.html" class="text-gray-600 hover:text-green-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                </a>
+                <a href="/login.html" class="text-gray-600 hover:text-green-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                </a>
+            `;
+    }
+    // --- END HEADER ---
+
+    function logout() {
+        localStorage.removeItem('ecoSproutToken');
+        window.location.href = '/';
+    }
+
+    const messageBar = document.getElementById('message-bar');
+    const messageText = document.getElementById('message-text');
+    function showMessage(message, isError = false) {
+        messageText.textContent = message;
+        if (isError) {
+            messageBar.className = "bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg relative mb-6";
+        } else {
+            messageBar.className = "bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg relative mb-6";
+        }
+        messageBar.classList.remove('hidden');
+        setTimeout(() => {
+            messageBar.classList.add('hidden');
+        }, 3000);
+    }
+
+    const productListEl = document.getElementById('product-list');
+    const categoryTabsNavEl = document.getElementById('category-tabs-nav');
+    const loadingMessageEl = document.getElementById('loading-message');
+
+    let allProducts = [];
+    let wishlistProductIds = new Set();
+
+    function createProductCard(product) {
+        const categoryIds = product.categories.map(c => c.id).join(' ');
+        const categoryName = product.categories.length > 0 ? product.categories[0].name : 'General';
+        const imageUrl = product.imageUrl ? product.imageUrl : 'https://placehold.co/600x600/e2e8f0/94a3b8?text=EcoSprout';
+
+        let buttonHtml = '';
+        if (product.stockQuantity > 0) {
+            buttonHtml = `<button onclick="addToCart(${product.id})" class="bg-green-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-green-700">
+                                Add to Cart
+                              </button>`;
+        } else {
+            buttonHtml = `<button class="bg-gray-400 text-white px-4 py-2 rounded-md text-sm font-medium cursor-not-allowed" disabled>
+                                Out of Stock
+                              </button>`;
+        }
+
+        const isWishlisted = wishlistProductIds.has(product.id);
+        const heartIconHtml = `
+                <button onclick="toggleWishlist(${product.id}, event)" class="absolute top-3 right-3 p-2 bg-white/70 rounded-full text-gray-700 hover:bg-white"
+                        id="wishlist-btn-${product.id}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                         fill="${isWishlisted ? '#EF4444' : 'none'}"
+                         stroke="${isWishlisted ? '#EF4444' : 'currentColor'}"
+                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                         <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+                    </svg>
+                </button>
+            `;
+
+        return `
+                <div class="product-card border rounded-lg shadow-sm overflow-hidden flex flex-col" data-category-ids="${categoryIds}" style="display: flex;">
+                    <a href="/product.html?id=${product.id}" class="block bg-gray-100 h-64 group relative">
+                        <img src="${imageUrl}" alt="${product.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                             onerror="this.src='https://placehold.co/600x600/e2e8f0/94a3b8?text=Image+Not+Found'">
+                        ${heartIconHtml}
+                    </a>
+                    <div class="p-4 flex-grow">
+                        <span class="text-xs text-gray-500 uppercase">${categoryName}</span>
+                        <a href="/product.html?id=${product.id}" class="block">
+                            <h3 class="text-lg font-semibold mt-1 hover:text-green-600">${product.name}</h3>
+                        </a>
+                        <p class="text-sm text-gray-600 mt-1 h-10 overflow-hidden">${product.description}</p>
+                    </div>
+                    <div class="p-4 border-t flex justify-between items-center">
+                        <span class="text-xl font-bold text-green-600">₹${product.price.toFixed(2)}</span>
+                        ${buttonHtml}
+                    </div>
+                </div>
+            `;
+    }
+
+    function filterProducts(categoryId) {
+        document.querySelectorAll('.shop-tab-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        document.getElementById(`tab-${categoryId}`).classList.add('active');
+
+        const allCards = document.querySelectorAll('.product-card');
+
+        if (categoryId === 'all') {
+            allCards.forEach(card => card.style.display = 'flex');
+        } else {
+            allCards.forEach(card => {
+                const cardCategoryIds = card.dataset.categoryIds.split(' ');
+                if (cardCategoryIds.includes(String(categoryId))) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+    }
+
+    async function fetchWishlistIds() {
+        if (!token) return;
+        try {
+            const response = await fetch('http://localhost:8081/api/wishlist/ids', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (response.ok) {
+                const ids = await response.json();
+                wishlistProductIds = new Set(ids);
+            }
+        } catch (error) {
+            console.error('Failed to fetch wishlist IDs:', error);
+        }
+    }
+
+    async function fetchAndRenderShop() {
+        try {
+            await fetchWishlistIds();
+
+            const [productResponse, categoryResponse] = await Promise.all([
+                fetch('http://localhost:8081/api/products'),
+                fetch('http://localhost:8081/api/categories')
+            ]);
+
+            if (!productResponse.ok) throw new Error('Failed to fetch products');
+            if (!categoryResponse.ok) throw new Error('Failed to fetch categories');
+
+            allProducts = await productResponse.json();
+            const categories = await categoryResponse.json();
+
+            loadingMessageEl.style.display = 'none';
+            productListEl.innerHTML = '';
+
+            if (allProducts.length > 0) {
+                allProducts.forEach(product => {
+                    productListEl.innerHTML += createProductCard(product);
+                });
+            } else {
+                productListEl.innerHTML = '<div class="text-center col-span-4 text-gray-500">No products found.</div>';
+            }
+
+            categories.forEach(category => {
+                const hasProducts = allProducts.some(product =>
+                    product.categories.some(pc => pc.id === category.id)
+                );
+
+                if (hasProducts) {
+                    categoryTabsNavEl.innerHTML += `
+                            <button id="tab-${category.id}" onclick="filterProducts(${category.id})" class="shop-tab-btn whitespace-nowrap py-4 px-1 border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 font-medium text-sm">
+                                ${category.name}
+                            </button>
+                        `;
+                }
+            });
+
+        } catch (error) {
+            console.error('Failed to fetch shop data:', error);
+            loadingMessageEl.innerHTML = `<div class="text-center col-span-4 text-red-500">Error loading shop: ${error.message}</div>`;
+        }
+    }
+
+    async function addToCart(productId) {
+        const token = localStorage.getItem('ecoSproutToken');
+        if (!token) {
+            window.location.href = '/login.html';
+            return;
+        }
+        const payload = { productId: productId, quantity: 1 };
+
+        try {
+            const response = await fetch('http://localhost:8081/api/cart/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (response.ok) {
+                showMessage('Success! Product added to cart.', false);
+            } else {
+                const errorData = await response.json();
+                if (errorData && errorData.message) {
+                    showMessage(errorData.message, true);
+                } else if (response.status === 401 || response.status === 403) {
+                    alert('Your session has expired. Please log in again.');
+                    logout();
+                }
+            }
+        } catch (error) {
+            console.error('Add to cart error:', error);
+            showMessage('An error occurred. Please try again.', true);
+        }
+    }
+
+    async function toggleWishlist(productId, event) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        if (!token) {
+            window.location.href = '/login.html?redirect=shop';
+            return;
+        }
+
+        const button = document.getElementById(`wishlist-btn-${productId}`);
+        const svg = button.querySelector('svg');
+
+        try {
+            const response = await fetch('/api/wishlist/toggle', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                body: JSON.stringify({ productId: productId })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                if (data.isWishlisted) {
+                    svg.setAttribute('fill', '#EF4444'); // red-500
+                    svg.setAttribute('stroke', '#EF4444');
+                    showMessage('Added to wishlist!', false);
+                } else {
+                    svg.setAttribute('fill', 'none');
+                    svg.setAttribute('stroke', 'currentColor');
+                    showMessage('Removed from wishlist.', false);
+                }
+            } else {
+                throw new Error('Failed to update wishlist');
+            }
+
+        } catch (error) {
+            console.error('Toggle wishlist error:', error);
+            showMessage(error.message, true);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', fetchAndRenderShop);
+    async function handleSearch() {
+    const keyword = document.getElementById('search-input').value;
+    const productList = document.getElementById('product-list');
+
+    productList.innerHTML = '<div class="text-center col-span-4 text-gray-500">Searching...</div>';
+
+    try {
+        const response = await fetch(`http://localhost:8081/api/products?keyword=${encodeURIComponent(keyword)}`);
+        if (!response.ok) throw new Error('Search failed');
+
+        const products = await response.json();
+        productList.innerHTML = '';
+
+        if (products.length > 0) {
+            products.forEach(product => {
+                productList.innerHTML += createProductCard(product);
+            });
+        } else {
+            productList.innerHTML = '<div class="text-center col-span-4 text-gray-500">No products match your search.</div>';
+        }
+    } catch (error) {
+        console.error('Search error:', error);
+        showMessage('Error performing search', true);
+    }
+}
+
+// Optional: Allow pressing "Enter" to search
+document.getElementById('search-input').addEventListener('keypress', function (e) {
+    if (e.key === 'Enter') {
+        handleSearch();
+    }
+});
+</script>
+</body>
+</html>

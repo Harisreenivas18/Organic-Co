@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - EcoSprout</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-50 flex flex-col min-h-screen">
+
+<!-- Header (UPDATED) -->
+<header class="bg-white shadow-sm">
+    <nav class="container mx-auto px-4 py-4 flex justify-between items-center">
+        <!-- Logo -->
+        <a href="/" class="text-3xl font-bold text-green-600">
+            EcoSprout
+        </a>
+        <!-- Main Navigation -->
+        <div class="hidden md:flex items-center space-x-6">
+            <a href="/" class="text-gray-600 hover:text-green-600">Home</a>
+            <a href="/shop.html" class="text-gray-600 hover:text-green-600">Shop</a>
+            <a href="/our_mission.html" class="text-gray-600 hover:text-green-600">Our Mission</a>
+        </div>
+        <!-- Auth/Cart Links (Will be populated by JS) -->
+        <div class="flex items-center space-x-4" id="auth-links">
+            Loading...
+        </div>
+    </nav>
+</header>
+
+<!-- Profile Content -->
+<main class="container mx-auto px-4 py-12 flex-grow">
+    <h1 class="text-3xl font-bold mb-8">My Profile</h1>
+
+    <!-- Global Message Bar -->
+    <div id="message-bar" class="hidden px-4 py-3 rounded-lg relative mb-6" role="alert">
+        <span class="block sm:inline" id="message-text"></span>
+    </div>
+
+    <div class="flex flex-col lg:flex-row gap-12">
+
+        <!-- Left Side: Profile Details -->
+        <div class="lg:w-2/3">
+            <form id="profile-form" class="bg-white p-8 rounded-lg shadow-md space-y-6">
+                <h2 class="text-2xl font-semibold mb-4">My Details</h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+                        <input type="text" id="username" readonly
+                               class="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md bg-gray-100 cursor-not-allowed">
+                    </div>
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
+                        <input type="email" id="email" required
+                               class="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="firstName" class="block text-sm font-medium text-gray-700">First Name</label>
+                        <input type="text" id="firstName"
+                               class="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500">
+                    </div>
+                    <div>
+                        <label for="lastName" class="block text-sm font-medium text-gray-700">Last Name</label>
+                        <input type="text" id="lastName"
+                               class="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500">
+                    </div>
+                </div>
+
+                <h3 class="text-xl font-semibold pt-4 border-t">Shipping Address</h3>
+
+                <div>
+                    <label for="addressLine1" class="block text-sm font-medium text-gray-700">Address Line 1</label>
+                    <input type="text" id="addressLine1"
+                           class="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500">
+                </div>
+                <div>
+                    <label for="addressLine2" class="block text-sm font-medium text-gray-700">Address Line 2 (Optional)</label>
+                    <input type="text" id="addressLine2"
+                           class="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500">
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div>
+                        <label for="city" class="block text-sm font-medium text-gray-700">City</label>
+                        <input type="text" id="city"
+                               class="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500">
+                    </div>
+                    <div>
+                        <label for="postalCode" class="block text-sm font-medium text-gray-700">Postal Code</label>
+                        <input type="text" id="postalCode"
+                               class="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500">
+                    </div>
+                    <div>
+                        <label for="country" class="block text-sm font-medium text-gray-700">Country</label>
+                        <input type="text" id="country"
+                               class="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500">
+                    </div>
+                </div>
+
+                <button type="submit"
+                        class="w-full px-4 py-2 text-sm font-medium text-white bg-green-600 border border-transparent rounded-md shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                    Update Profile
+                </button>
+            </form>
+        </div>
+
+        <!-- Right Side: Change Password & Logout -->
+        <div class="lg:w-1/3 space-y-8">
+            <form id="password-form" class="bg-white p-8 rounded-lg shadow-md space-y-6">
+                <h2 class="text-2xl font-semibold mb-4">Change Password</h2>
+                <div>
+                    <label for="oldPassword" class="block text-sm font-medium text-gray-700">Old Password</label>
+                    <input type="password" id="oldPassword" required
+                           class="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500">
+                </div>
+                <div>
+                    <label for="newPassword" class="block text-sm font-medium text-gray-700">New Password</label>
+                    <input type="password" id="newPassword" required
+                           class="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500">
+                </div>
+                <button type="submit"
+                        class="w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    Change Password
+                </button>
+            </form>
+
+            <div class="bg-white p-8 rounded-lg shadow-md">
+                <button onclick="logout()"
+                        class="w-full px-4 py-2 text-sm font-medium text-white bg-red-600 border border-transparent rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                    Logout
+                </button>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Footer -->
+<footer class="bg-gray-800 text-gray-300 py-12 mt-auto">
+    <div class="container mx-auto px-4 text-center">
+        <p>&copy; 2025 EcoSprout. All rights reserved.</p>
+    </div>
+</footer>
+
+<script>
+    const token = localStorage.getItem('ecoSproutToken');
+    const authLinks = document.getElementById('auth-links');
+
+    // --- Auth Check ---
+    if (!token) {
+        window.location.href = '/login.html?redirect=profile';
+    }
+
+    function parseJwt(token) {
+        try { return JSON.parse(atob(token.split('.')[1])); } catch (e) { return null; }
+    }
+    let userRoles = [];
+    if (token) {
+        const tokenData = parseJwt(token);
+        if (tokenData && tokenData.roles) {
+            userRoles = tokenData.roles.split(',');
+        }
+    }
+    const isAdmin = userRoles.includes('ROLE_ADMIN');
+
+    // --- Auth Links Management ---
+    if (token) {
+        let adminLink = isAdmin ? '<a href="/admin.html" class="text-sm font-medium text-red-600 hover:text-red-700">Admin</a>' : '';
+        authLinks.innerHTML = `
+                ${adminLink}
+                <a href="/order_history.html" class="text-sm font-medium text-gray-600 hover:text-green-600">My Orders</a>
+                <a href="/wishlist.html" class="text-gray-600 hover:text-green-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+                </a>
+                <a href="/cart.html" class="text-gray-600 hover:text-green-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                </a>
+                <!-- NEW PROFILE ICON -->
+                <a href="/profile.html" class="text-green-600 font-bold"> <!-- Active -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                </a>
+            `;
+    } // No else, because we redirect if no token
+
+    function logout() {
+        localStorage.removeItem('ecoSproutToken');
+        window.location.href = '/';
+    }
+
+    // --- Message Bar ---
+    const messageBar = document.getElementById('message-bar');
+    const messageText = document.getElementById('message-text');
+
+    function showMessage(message, isError = false) {
+        messageText.textContent = message;
+        if (isError) {
+            messageBar.className = "bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg relative mb-6";
+        } else {
+            messageBar.className = "bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg relative mb-6";
+        }
+        messageBar.classList.remove('hidden');
+        setTimeout(() => {
+            messageBar.classList.add('hidden');
+        }, 3000);
+    }
+
+    // --- Form References ---
+    const profileForm = document.getElementById('profile-form');
+    const passwordForm = document.getElementById('password-form');
+    const usernameEl = document.getElementById('username');
+    const emailEl = document.getElementById('email');
+    const firstNameEl = document.getElementById('firstName');
+    const lastNameEl = document.getElementById('lastName');
+    const addressLine1El = document.getElementById('addressLine1');
+    const addressLine2El = document.getElementById('addressLine2');
+    const cityEl = document.getElementById('city');
+    const postalCodeEl = document.getElementById('postalCode');
+    const countryEl = document.getElementById('country');
+
+    // --- Load Profile Data ---
+    async function fetchProfile() {
+        try {
+            const response = await fetch('/api/user/profile', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (response.status === 401) logout();
+            if (!response.ok) throw new Error('Failed to fetch profile');
+
+            const user = await response.json();
+
+            // Populate the form
+            usernameEl.value = user.username;
+            emailEl.value = user.email || '';
+            firstNameEl.value = user.firstName || '';
+            lastNameEl.value = user.lastName || '';
+            addressLine1El.value = user.addressLine1 || '';
+            addressLine2El.value = user.addressLine2 || '';
+            cityEl.value = user.city || '';
+            postalCodeEl.value = user.postalCode || '';
+            countryEl.value = user.country || '';
+
+        } catch (error) {
+            console.error("Fetch profile error:", error);
+            showMessage(error.message, true);
+        }
+    }
+
+    // --- Handle Profile Update ---
+    profileForm.addEventListener('submit', async function(event) {
+        event.preventDefault();
+        const payload = {
+            email: emailEl.value,
+            firstName: firstNameEl.value,
+            lastName: lastNameEl.value,
+            addressLine1: addressLine1El.value,
+            addressLine2: addressLine2El.value,
+            city: cityEl.value,
+            postalCode: postalCodeEl.value,
+            country: countryEl.value,
+        };
+
+        try {
+            const response = await fetch('/api/user/profile', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                body: JSON.stringify(payload)
+            });
+
+            if (response.ok) {
+                showMessage('Profile updated successfully!', false);
+            } else {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Failed to update profile');
+            }
+        } catch (error) {
+            console.error("Update profile error:", error);
+            showMessage(error.message, true);
+        }
+    });
+
+    // --- Handle Password Change ---
+    passwordForm.addEventListener('submit', async function(event) {
+        event.preventDefault();
+        const oldPassword = document.getElementById('oldPassword').value;
+        const newPassword = document.getElementById('newPassword').value;
+
+        try {
+            const response = await fetch('/api/user/password', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                body: JSON.stringify({ oldPassword, newPassword })
+            });
+
+            const responseData = await response.json();
+
+            if (response.ok) {
+                showMessage(responseData.message, false);
+                passwordForm.reset();
+            } else {
+                throw new Error(responseData.message || 'Failed to change password');
+            }
+        } catch (error) {
+            console.error("Password change error:", error);
+            showMessage(error.message, true);
+        }
+    });
+
+    // Initial load
+    document.addEventListener('DOMContentLoaded', fetchProfile);
+
+</script>
+</body>
+</html>
