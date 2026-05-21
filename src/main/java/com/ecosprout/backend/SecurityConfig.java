@@ -56,8 +56,9 @@ public class SecurityConfig {
                                 "/register.html", "/cart.html", "/checkout.html",
                                 "/order_confirmation.html", "/product.html",
                                 "/order_history.html", "/our_mission.html",
-                                "/wishlist.html", "/profile.html", // Added profile.html
-                                "/images/**", "/css/**", "/js/**"
+                                "/wishlist.html", "/profile.html",
+                                "/images/**", "/css/**", "/js/**",
+                                "/favicon.ico", "/error"
                         ).permitAll()
 
                         // 2. PUBLIC API ENDPOINTS
