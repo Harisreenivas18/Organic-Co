@@ -85,6 +85,7 @@ This project was built using Spring Boot, Java, HTML, Tailwind CSS, JavaScript, 
 
 # 📂 Project Structure
 
+```plaintext
 Organic-Co
 │
 ├── src
@@ -102,6 +103,7 @@ Organic-Co
 ├── Dockerfile
 ├── pom.xml
 ├── mvnw
+├── mvnw.cmd
 └── README.md
 
 ---
