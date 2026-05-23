@@ -10,7 +10,7 @@ https://organic-co.onrender.com
 
 Organic Co is a modern eco-friendly ecommerce platform developed to promote sustainable living through environmentally conscious products. The website provides users with a clean and responsive shopping experience while encouraging the use of reusable, biodegradable, and organic alternatives.
 
-This project was built using Spring Boot, Java, HTML, Tailwind CSS, JavaScript, and PostgreSQL/H2 Database.
+This project was built using Spring Boot, Java, HTML, Tailwind CSS, JavaScript, and PostgreSQL.
 
 ---
 
@@ -73,7 +73,7 @@ This project was built using Spring Boot, Java, HTML, Tailwind CSS, JavaScript, 
 ---
 
 ## Database
-- PostgreSQL / H2 Database
+- PostgreSQL 
 
 ---
 
